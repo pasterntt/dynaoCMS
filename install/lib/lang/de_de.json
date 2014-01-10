@@ -1,0 +1,25 @@
+{
+	"db":					"Datenbank",
+	"finish":				"Fertig",
+	"ok":					"Ok",
+	"status":				"Status",
+	"php_version":			"PHP Version",
+	"php_version_54":		"Es wird mindestens PHP Version 5.4 benötigt",
+	"chmod_755":			"Chmod 0755 benötigt",
+	"php_ext": 				"PHP Extension %s konnte nicht geladen werden",
+	"installation":			"Installation",
+	"db_prefix":			"Prefix",
+	"db_host":				"Host",
+	"db_user":				"Benutzer",
+	"db_password":			"Passwort",
+	"db_database":			"Datenbank",
+	"db_connect":			"Datenbank Verbindung",
+	"licence":				"Lizenz",
+	"accept":				"Akzeptieren",
+	"install_success":		"dynaoCMS wurde erfolgreich installiert und kann nun verwendet werden.",
+	"install_delete":		"Bitte <strong>löschen</strong> Sie den Installations-Ordner \"/install\"!",
+	"dynao_site":			"dynaoCMS Webseite",
+	"dynao_forum":			"dynaoCMS Forum",
+	"visit_admin":			"Admin Login"
+
+}

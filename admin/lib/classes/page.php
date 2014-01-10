@@ -1,0 +1,127 @@
+<?php
+
+class page {
+	use traitFactory;
+	use traitMeta;
+	
+	protected $sql;
+	
+	public function __construct($id, $offlinePages = true) {
+		
+		if(is_object($id)) {
+			
+			$this->sql = $id;
+			
+		} else {
+			
+			$extraWhere = '';
+			
+			if(!$offlinePages) {				
+				$extraWhere =  'AND WHERE online = 1';				
+			}
+			$this->sql = sql::factory();
+			$this->sql->query('SELECT *	FROM '.sql::table('structure').' WHERE id = '.$id.$extraWhere)->result();		
+		
+		}
+		
+	}
+	
+	public function get($value, $default = null) {
+		
+		return $this->sql->get($value, $default);
+		
+	}
+	
+	public function isOnline() {
+	
+		return $this->get('online', 0) == 1;
+		
+	}
+	
+	public function getBlocks() {
+		return module::getByStructureId($this->get('id'));
+	}
+	
+	public static function generateArticle($id) {
+		
+		$return = [];
+		
+		$backend = dyn::get('backend');
+		dyn::add('backend', false);
+		
+		$page = new page($id);
+		$blocks = $page->getBlocks();
+		
+		foreach($blocks as $block) {
+			$return[] =  $block->getContent();
+		}
+		
+		dyn::add('backend', $backend);
+		
+		return implode(PHP_EOL, $return);
+	}
+	
+	public function getTemplate() {
+		
+		ob_start();
+		ob_implicit_flush(0);
+		
+		$content = self::generateArticle($this->get('id'));
+		
+		dyn::add('content', $content);
+		
+		include(dir::template(dyn::get('template'), $this->get('template')));
+		
+		$content = extension::get('FRONTEND_OUTPUT', ob_get_contents());
+		
+		ob_end_clean();
+		
+		return $content;
+		
+	}
+	
+	public static function getChildPages($parentId, $offlinePages = true) {
+		
+		$return = [];
+		$classname = __CLASS__;
+		
+		$extraWhere = '';
+			
+		if(!$offlinePages) {				
+			$extraWhere =  ' AND online = 1';				
+		}
+	
+		$sql = sql::factory();
+		$sql->query('SELECT * FROM '.sql::table('structure').' WHERE parent_id = '.$parentId.$extraWhere.' ORDER BY sort')->result();							
+		while($sql->isNext()) {
+		
+			$return[] = new $classname($sql);
+			
+			$sql->next();	
+		}
+		
+		return $return;
+	
+	}
+	
+	public static function getRootPages($offlinePage = true) {
+		
+		return self::getChildPages(0, $offlinePage);
+		
+	}
+	
+	public static function isValid($id) {
+		
+		$sql = sql::factory();
+		return (bool)$sql->num('SELECT id FROM '.sql::table('structure').' WHERE id = '.$id);
+	}
+	
+	public function isStart() {
+		
+		return (dyn::get('start_page') == $this->get('id'));
+			
+	}
+	
+}
+
+?>

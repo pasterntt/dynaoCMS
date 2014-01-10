@@ -1,0 +1,187 @@
+{
+	#Einstellungen
+	"lang": 					"Deutsch",
+	"dateformat":				"d.m.Y",
+	
+	"yes":						"Ja",
+	"no":						"Nein",
+	"name":						"Name",
+	"online":					"Online",
+	"offline":					"Offline",
+	"action":					"Aktion",
+	"actions":					"Aktionen",
+	"title":					"Titel",
+	"select":					"Auswählen",
+	"selected":					"Ausgewählt",
+	"description":				"Beschreibung",
+	"access_denied":			"Zugriff verweigert!",
+	
+	#Aktionen
+	"update":					"Aktualisieren",
+	"add":						"Hinzufügen",
+	"edit":						"Editieren",
+	"delete":					"Löschen",
+	"save":						"Speichern",
+	"back":						"Zurück",
+	"apply":					"Übernehmen",
+	"try_again":				"Erneut versuchen",
+	
+	#Misc
+	"save_status":				"Status erfoglreich geändert",
+	"save_sorting":				"Sortierung erfolgreich übernommen",
+	"overview":					"Übersicht",
+	"logs":						"Logs",
+	"no_entries":				"Keine Einträge",	
+	"connection_again":			"Verbindung wurde erneut hergestellt",
+	"template":					"Template",
+	"dashboard":				"Dashboard",
+	"addon_navi":				"Addon Navi",
+	"visit_site":				"Seite besuchen",
+	"read_more":				"Weiterlesen",
+	"download":					"Download",
+	"vote":						"Vote",
+	"author":					"Ersteller",
+	"version":					"Version",
+	"start":					"Start",
+	"close":					"schließen",
+	"really_delete":			"Wirklich löschen?",
+	
+	#Kategorien
+	"category_save":			"Kategorie speichern",
+	"category":					"Kategorie",
+	"categories":				"Kategorien",
+	"no_categories":			"Keine Kategorien",
+	"no_category":				"Keine Kategorie",
+	"category_deleted":			"Kategorie erfolgreich gelöscht",
+	"all_categories":			"Alle Kategorien",
+	
+	#Rights
+	"page[edit]":				"Seiten bearbeiten/erstellen",
+	"page[delete]":				"Seiten löschen",
+	"page[content]":			"Content verwalten",
+	"page[module]":				"Module verwalten",
+	"admin[user]":				"Benutzer verwalten",
+	"admin[addon]":				"Addon's verwalten",
+	
+	#Versioncheck
+	"version_fail_connect":		"Verbindung zum Server konnte nicht hergestellt werden",
+	"version_fail_version1":	"Sie verwenden eine veraltete Version",
+	"version_fail_version2":	"Sie verwenden eine veraltete Nebenversion",
+	"version_fail_version3":	"Sie verwenden eine veraltete Minor-Version",
+	
+	#Login	
+	"login_form_notfull":		"Formular wurde nicht vollständig gesendet!",
+	"login_no_user":			"Kein Benutzer mit der E-Mail-Adresse \"%s\" gefunden",
+	"login_pwd_false":			"Das angebene Passwort ist falsch",
+	"login_remember":			"Login merken",
+	"login_pwd_forget":			"Passwort vergessen ?",
+	"login_logout_success":		"Erfolgreich ausgeloggt",
+	
+	#Addon
+	"addons":					"Addons",
+	"all_addons":				"Alle Addons",
+	"addon_save_success":		"Addon erfolgreich gespeichert",
+	"addon_install_first":		"Bitte installieren Sie das Addon \"%s\" zuerst",
+	"addon_installed":			"Installiert",
+	"addon_not_installed":		"Nicht installiert",
+	"addon_actived":			"Aktiviert",
+	"addon_not_actived":		"Nicht aktiviert",
+	"addon_errors":				"Das Addon %s hat folgende Fehler:<br />%s",
+	"addon_check_error":		"%s::check konnte nicht %s überprüfen",
+	"addon_wrong_version":		"Die Aktuelle Version ist %s das Addon braucht Version %s",
+	"addon_no_access":			"Sie haben kein Zugriff auf diesen Bereich",
+	"addon_not_found":			"Das Addon %s wurde nicht gefunden<br />",
+	"addon_not_install_active":	"Das Addon %s muss installiert und aktiviert werden<br />",
+	"addon_need_version":		"Das Addon %s muss mindestens in Version %s vorhanden sein<br />",
+	"addon_deleted":			"Das Addon %s wurde erfolgreich gelöscht",
+	"addon_no_readme":			"Keine README.md vorhanden",
+	
+	#Settings
+	"settings_name_of_site":	"Name der Website",
+	"settings_url_of_site":		"URL der Website",
+	"settings_backend_lang":	"Backend Sprache",
+	"general":					"Allgemein",
+	"system":					"System",
+	"dynao_version":			"Dynao Version",
+	"php_version":				"PHP Version",
+	"mysql_version":			"MySQL Version",
+	"settings":					"Einstellungen",
+	"type":						"Typ",
+	"value":					"Wert",
+	"start_page":				"Startseite",
+	"error_page":				"Fehlerseite",
+	"delete_cache":				"Cache löschen",
+	"load_template":			"Template-Config laden",
+	"delete_cache_success":		"Cache komplett gelöscht",
+	"load_template_success":	"Template-Config geladen",
+	"load_template_failed":		"Template-Config nicht geladen",
+	
+	#Structure
+	"structure_content_save":	"Inhalt erfolgreich übernommen",
+	"structure_content_delete": "Erfolgreich gelöscht",
+	"structure_delete":			"Artikel erfolgreich gelöscht",
+	"article":					"Artikel",
+	"article_save":				"Artikel speichern",
+	"structure":				"Struktur",
+	"pages":					"Seiten",
+	
+	#Modul
+	"modul_php_error":			"Der Modulcode hat einen PHP Fehler und kann deshalb nicht ausgeführt werden",
+	"module_add":				"Modul hinzufügen",
+	"block_status":				"Block Status",
+	"module":					"Modul",
+	"modules":					"Module",
+	"input":					"Eingabe",
+	"output":					"Ausgabe",
+	"module_deleted":			"Modul erfolgreich gelöscht",
+	"module_in_use":			"Das Modul wird noch verwendet",
+	
+	#Slots
+	"slots_current_page":		"Slots im aktuellen Template",
+	"slots":					"Slots",
+	"slot_name_not_exist":		"[Der Slot \"%s\" existiert nicht]",
+	"slots_show":				"Anzeigen in",
+	"slot_deleted":				"Slot erfolgreich gelöscht",
+	
+	#User
+	"user_wrong_email":			"Bitte geben Sie eine gültige E-Mail-Adresse an",
+	"email_adress":				"E-Mail Adresse",
+	"password":					"Passwort",
+	"password_info":			"<small>Sie sehen das verschlüsselte Passwort! Um ein neues Passwort zu vergeben, einfach eingeben!</small>",
+	"email":					"E-Mail",
+	"user":						"Benutzer",
+	"firstname":				"Vorname",
+	"user_email_empty":			"Das E-Mail-Feld darf nicht leer sein",
+	"user_password_empty":		"Das Passwort-Feld darf nicht leer sein",
+	"user_deleted":				"Benutzer erfolgreich gelöscht",
+	
+	#SQL
+	"sql_query_error":			"Query konnte nicht ausgeführt werden<pre>%s</pre>Error: %s",
+	"sql_result_invalid_type":	"%s::result erwartet als $type MYSQLI_NUM, MYSQLI_ASSOC oder MYSQLI_BOTH",
+	"sql_result_error":			"Resultat vom Query konnte nicht erzeugt werden",
+	
+	#Form
+	"form_saved":				"Formular erfolgreich gespeichert",
+	
+	#Extension
+	"extension_callable_func":	"%s::add erwartet als 2. Parameter eine vorhandene Funktion",
+	
+	#Validator
+	"validator_method_exists":	"%s::%s erwartet als $type eine vorhandene Methode",
+	"validator_wrong_type":		"%s::%s erwartet int/float/string als $type",
+	"validator_not_empty":		"Feld darf nicht leer sein",
+	
+	#traitMeta
+	"traitmeta_callable_func":	"%s::%s erwartet als 2. Parameter eine aufrufbare Funktion",
+	"traitmeta_not_exists":		"%s besitzt die Methode %s nicht",
+	
+	#formLink
+	"select_page":				"Seite auswählen",
+	"field_set_empty":			"Feld leeren",
+	"element_to_top":			"Element nach ganz oben verschieben",
+	"element_to_up":			"Element nach oben verschieben",
+	"element_to_down":			"Element nach unten verschieben",
+	"element_to_bottom":		"Element nach ganz unten verschieben",
+	"element_delete":			"Element löschen"
+	
+}

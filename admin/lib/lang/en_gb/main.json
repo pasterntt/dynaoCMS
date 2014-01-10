@@ -1,0 +1,184 @@
+{
+	#Einstellungen
+	"lang":						"English",
+	"dateformat":				"d.m.Y",
+	
+	"yes":						"yes",
+	"no":						"no",
+	"name":						"Name",
+	"online":					"Online",
+	"offline":					"Offline",
+	"action":					"Action",
+	"actions":					"Actions",
+	"title":					"Title",
+	"select":					"Select",
+	"selected":					"Selected",
+	"description":				"Description",
+	"access_denied":			"Access denied!",	
+	
+	#Aktionen
+	"update":					"Update",
+	"add":						"Add",
+	"edit":						"Edit",
+	"delete":					"Delete",
+	"save":						"Save",
+	"back":						"Back",
+	"apply":					"Apply",
+	"try_again":				"Try again",
+	
+	#Misc
+	"save_status":				"Status successfully changed",
+	"save_sorting":				"Sorting successfully saved",
+	"overview":					"Overview",
+	"logs":						"Logs",
+	"no_entries":				"No entries",
+	"connection_again":			"Connection has been made again",
+	"template":					"Template",
+	"dashboard":				"Dashboard",
+	"addon_navi":				"Addon Navi",
+	"visit_site":				"Visit website",
+	"read_more":				"Read more",
+	"download":					"Download",
+	"vote":						"Vote",
+	"author":					"author",
+	"version":					"version",
+	"start":					"start",
+	"close":					"close",
+	"really_delete":			"really delete?",
+	
+	#Kategorien
+	"category_save":			"Save category",
+	"category":					"Category",
+	"categories":				"Categories",
+	"no_categories":			"No categories",
+	"no_category":				"No category",
+	"category_deleted":			"Category successfully deleted",
+	"all_categories":			"All categories",
+	
+	#Rights
+	"page[edit]":				"Edit/create page",
+	"page[delete]":				"Delete page",
+	"page[content]":			"Manage content",
+	"page[module]":				"Modules manage",
+	"admin[user]":				"Manage user",
+	"admin[addon]":				"Manage addon's",
+	
+	#Versioncheck
+	"version_fail_connect":		"Connection to the server could not be established",
+	"version_fail_version1":	"You are using an outdated version",
+	"version_fail_version2":	"You are using an outdated minor version",
+	"version_fail_version3":	"You are using an outdated minor version",
+	
+	#Login	
+	"login_form_notfull":		"Form was not completely sent!",
+	"login_no_user":			"No user with the e-mail address \"%s\" found",
+	"login_pwd_false":			"It is surrounded password is incorrect",
+	"login_remember":			"Remember me",
+	"login_pwd_forget":			"Forget your password ?",
+	"login_logout_success":		"Logged out successfully",
+	
+	#Addon
+	"addons":					"Addons",
+	"all_addons":				"All addons",
+	"addon_save_success":		"Addon successfully saved",
+	"addon_install_first":		"Please install the addon \"%s\" first",
+	"addon_installed":			"Installed",
+	"addon_not_installed":		"Not installed",
+	"addon_actived":			"Enabled",
+	"addon_not_actived":		"Not enabled",
+	"addon_errors":				"The addon %s has the following error:<br />%s",
+	"addon_check_error":		"%s::check could not check %s",
+	"addon_wrong_version":		"The current version is %s, the addon needs version %s",
+	"addon_no_access":			"You have no access to this area",
+	"addon_not_found":			"The addon %s was not found<br />",
+	"addon_not_install_active":	"The addon %s must be installed and enabled<br />",
+	"addon_need_version":		"The addon %s must be present at least in version %s<br />",
+	"addon_deleted":			"The addon %s was successfully deleted",
+	"addon_no_readme":			"No README.md exists",
+	
+	#Settings
+	"settings_name_of_site":	"Name of the site",
+	"settings_url_of_site":		"URL of the site",
+	"settings_backend_lang":	"Backend language",
+	"general":					"General",
+	"system":					"System",
+	"dynao_version":			"Dynao version",
+	"php_version":				"PHP version",
+	"mysql_version":			"MySQL version",
+	"settings":					"Settings",
+	"type":						"Type",
+	"value":					"Value",
+	"start_page":				"Startpage",
+	"error_page":				"Errorpage",
+	"delete_cache":				"Delete cache",
+	"load_template":			"Load template config",
+	"delete_cache_success":		"Cache completely deleted",
+	"load_template_success":	"Template config loaded",
+	"load_template_failed":		"Cant load template config",
+	
+	#Structure
+	"structure_content_save":	"Content successfully saved",
+	"structure_content_delete": "Successfully deleted",
+	"structure_delete":			"Page successfully deleted",
+	"article":					"Page",
+	"article_save":				"Save page",
+	"structure":				"Structure",
+	"pages":					"Pages",
+	
+	#Modul
+	"modul_php_error":			"The code module has a PHP error and therefore can not be executed",
+	"module_add":				"Add modul",
+	"block_status":				"Block status",
+	"module":					"Module",
+	"modules":					"Modules",
+	"module_deleted":			"Module successfully deleted",
+	"module_in_use":			"The module is still in use",
+	
+	#Slots
+	"slots_current_page":		"Slots at the current template",
+	"slots":					"slots",
+	"slot_name_not_exist":		"[The slot \"%s\" does not exist]",
+	"slots_show":				"Show in",
+	"slot_deleted":				"Slot successfully deleted",
+	
+	#User
+	"user_wrong_email":			"Please enter a valid email address",
+	"email_adress":				"eMail adress",
+	"password":					"Password",
+	"password_info":			"<small>You can see the encrypted password! To assign a new password, simply enter!</small>",
+	"email":					"E-Mail",
+	"user":						"User",
+	"firstname":				"Firstname",
+	"user_email_empty":			"E-Mail field must not be empty",
+	"user_password_empty":		"Password field must not be empty",
+	"user_deleted":			"User successfully deleted",
+	
+	#SQL
+	"sql_query_error":			"Query could not be executed<pre>%s</pre>Error: %s",
+	"sql_result_invalid_type":	"%s::result expected result as $type MYSQLI_NUM, MYSQLI_ASSOC or MYSQLI_BOTH",
+	"sql_result_error":			"Result of the query could not be created",
+	
+	#Form
+	"form_saved":				"Form successfully saved",
+	
+	#Extension
+	"extension_callable_func":	"%s::add expected as 2 Parameters of an existing function",
+	
+	#Validator
+	"validator_method_exists":	"%s::%s expected as $type an existing method",
+	"validator_wrong_type":		"%s::%s expected int/float/string as $type",
+	"validator_not_empty":		"Field must not be empty",
+	
+	#traitMeta
+	"traitmeta_callable_func":	"%s::%s expected as 2 Parameter a callable function",
+	"traitmeta_not_exists":		"%s does not have the method %s",
+	
+	#formLink
+	"select_page":				"Select page",
+	"field_set_empty":			"Empty field",
+	"element_to_top":			"Move item to the top",
+	"element_to_up":			"Move item up",
+	"element_to_down":			"Move item down",
+	"element_to_bottom":		"Move item to the bottom",
+	"element_delete":			"Delete item"
+}
