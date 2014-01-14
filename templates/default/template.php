@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta charset="utf-8">
     <title><?= $this->get('name'); ?> - <?= dyn::get('hp_name'); ?></title>
+    <base href="<?= dyn::get('hp_url'); ?>">
     <meta name="description" content="<?= $this->get('description') ?>">
 	<meta name="keywords" content="<?= $this->get('keywords') ?>">
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
@@ -64,11 +65,11 @@
     	<div class="row">
         	<div class="col-lg-12">
                 <section id="content">
-                	<?php echo slot::getSlot('boxen'); ?>
+                	<?= slot::getSlot('boxen'); ?>
                     
                     <div class="row">
         				<div class="col-md-8">
-               				<?php echo dyn::get('content'); ?> 
+               				<?= dyn::get('content'); ?> 
                     	</div>
         				<div class="col-md-4">
                         	<?php

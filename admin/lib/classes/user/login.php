@@ -64,7 +64,7 @@ class userLogin {
 		$password = type::post('password', 'string');
 		
 		// Formular ganz abgesendet?
-		if(is_null($email) || is_null($password) || empty($email) || empty($password)) {
+		if(is_null($email) || is_null($password) || $email == '' || $password == '') {
 			
 			echo message::info(lang::get('login_form_notfull'), true);
 			return;
@@ -72,7 +72,7 @@ class userLogin {
 		}
 		
 		$sql = sql::factory();
-		$sql->query('SELECT password, id FROM '.sql::table('user').' WHERE `email` = "'.$email.'"');
+		$sql->query('SELECT password, id FROM '.sql::table('user').' WHERE `email` = "'.$sql->escape($email).'"');
 		
 		// Username mit E-Mail vorhanden?
 		if(!$sql->num()) {
