@@ -157,7 +157,7 @@
 	"module_in_use":			"The module is still in use",
 	"module_more":				"More modules",
 	"module_install_success":		"Modul \"%s\" successfully installed",
-
+    "failed_plugins_load":      "Dynao CMS failed to load several plugins! Check if files are corrupt or missing.",
 
 	#Blocks
 	"blocks_current_page":		"Blocks at the current template",

@@ -53,7 +53,7 @@ foreach(addonConfig::includeAllConfig() as $file) {
 
 }
 if($failed_plugins >0){
-    echo message::warning(lang::get(sprintf('failed_plugins_load'), $failed_plugins));
+    echo message::warning(lang::get('failed_plugins_load'));
 }
 
 $page = type::super('page', 'string', 'dashboard');

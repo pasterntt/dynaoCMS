@@ -159,7 +159,7 @@
 	"module_in_use":			"Das Modul wird noch verwendet",
 	"module_more":				"Weitere Module",
 	"module_install_success":		"Modul \"%s\" erfolgreich installiert",
-    "failed_plugins_load":      "Das Laden von %s Plugins schlug fehl. Bitte prüfen Sie, ob die benötigten Dateien vorhanden sind!",
+    "failed_plugins_load":      "Das Laden von mehreren Plugins schlug fehl. Bitte prüfen Sie, ob die benötigten Dateien vorhanden sind!",
 	#Block
 	"blocks_current_page":		"Blöcke im aktuellen Template",
 	"blocks":					"Blöcke",
