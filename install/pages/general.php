@@ -12,18 +12,18 @@ $table->addSection('tbody');
 
 $table->addRow()
 ->addCell(lang::get('php_version'))
-->addCell('>5.4');
+->addCell(phpversion());
 				
-if(version_compare(phpversion(), '5.4', '<')) {		
+if(utils::CheckForPHPVersion()) {
 
-	$table->addCell('<span class="label label-danger">'.lang::get('php_version_54').'</span>');			
-		
+	$table->addCell('<span class="label label-danger">'.lang::get('php_version_required').'</span>');
+    $error = true;
 } else {
 	
 	$table->addCell('<span class="label label-success">'.lang::get('ok').'</span>');
 		
 }
-                
+
 $writeable = [
 	dir::cache(),
 	dir::backend('addons'.DIRECTORY_SEPARATOR),
@@ -90,53 +90,64 @@ foreach($writeable as $file) {
                 <div class="panel-heading">
                     <h3 class="panel-title"><?php echo lang::get('general'); ?></h3>
                 </div>
-                <div class="panel-body">                
+                <div class="panel-body">
+
                     <?php
-						
+                    if($error)
+                        echo message::danger(lang::get('dependencies_not_met'));
+
 						$form = form_install::factory('', '', 'index.php');
 						$form->addParam('page', $page);
-						
+
+
 						$field = $form->addTextField('hp_name', dyn::get('hp_name'));
 						$field->fieldName(lang::get('settings_name_of_site'));
-						
-						$field = $form->addTextField('hp_url', dyn::get('hp_url'));
-						$field->fieldName(lang::get('settings_url_of_site'));
+
+                        if (empty($_SERVER['HTTPS'])) $protocol = 'http://';
+                        else $protocol = 'https://';
+                        $field = $form->addTextField('hp_url', dyn::get('hp_url', $protocol.$_SERVER['SERVER_NAME']));
+                        $field->fieldName(lang::get('settings_url_of_site'));
 						
 						$field = $form->addSelectField('lang', dyn::get('lang'));
 						$field->fieldName(lang::get('settings_backend_lang'));
 									
 						$handle = opendir(dir::backend('lib'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR));
-						while($file = readdir($handle)) {
+						foreach(lang::ListLang() as $lang) {
 								
-								if(in_array($file, ['.', '..']))
-									continue;
-								
-								$field->add($file, $file);
+								$field->add($lang['short'], $lang['readable']);
+
 						}
 						
 						if($form->isSubmit()) {
-								
-							$url = 'http://'.str_replace('http://', '', $form->get('hp_url'));
+
+
+							if(substr($form->get('hp_url'), 0, 5) == 'https')
+								$url = 'https://'.str_replace(['http://', 'https://'], '', $form->get('hp_url'));
+							else
+								$url = 'http://'.str_replace(['http://', 'https://'], '', $form->get('hp_url'));
+
 							$endSlash = substr($url, -1, 1);
-							
+
 							if($endSlash != '/') {
 								$url .= '/';
 							}
-							
+
 							dyn::add('hp_name', $form->get('hp_name'), true);
 							dyn::add('hp_url', $url, true);
 							dyn::add('lang', $form->get('lang'), true);
 							dyn::save();
-							
-						
-							
-							if($error)
+
+                            if(utils::CheckForPHPVersion()) {
+                                $error = TRUE;
+                                echo 'test';
+                            }
+							if($error){
 								echo message::danger('error');
-							else
+                                echo 'Test';
+                            }else
 								$form->addParam('page', 'database');
-						
+
 						}
-						
 						echo $form->show();
 					
 					?>                

@@ -47,47 +47,73 @@ class template {
 			
 	}
 	
-	public function installSlots($update = false) {
+	public function installModule($module, $update = false) {
 		
-		$slots = sql::factory();
-		$slots->setTable('slots');
+		$modulSql = sql::factory();
+		$modulSql->setTable('module');
 		
-		$modul = sql::factory();
-		$modul->setTable('module');
+		foreach($module as $modulName=>$modul) {
+				
+			$modulExists = $modulSql->num('SELECT id FROM '.sql::table('module').' WHERE `name` = "'.$modulName.'"');
+			
+			if(!$update && $modulExists) {
+				continue;	
+			}
+			
+			$modulSql->addPost('name', $modulName);
+			$modulSql->addPost('input', $modul['input']);
+			$modulSql->addPost('output', $modul['output']);
+			
+			if(isset($modul['blocks'])) {
+				$modulSql->addPost('blocks', $modul['blocks']);
+			} else {
+				$modulSql->addPost('blocks', 1);
+			}
+			
+			if(!$modulExists) {
+				
+				$modulSql->save();
+				return $modulSql->insertId();
+				
+			} else {
+				
+				$modulSql->setWhere('name="'.$modulName.'"');
+				$modulSql->update();
+				
+				$modulSql->select('id')->result();
+				return $modulSql->get('id');
+				
+			}
+			
+				
+		}
+		
+	}
 	
-		foreach($this->get('slots', []) as $name=>$slot) {
+	public function installBlocks($update = false) {
+		
+		$blocks = sql::factory();
+		$blocks->setTable('blocks');
+	
+		foreach($this->get('blocks', []) as $name=>$block) {
 			
-			$slotExists = $slots->num('SELECT id FROM '.sql::table('slots').' WHERE `name` = "'.$name.'" AND `template` = "'.$this->name.'"');
+			$blockExists = $blocks->num('SELECT id FROM '.sql::table('blocks').' WHERE `name` = "'.$name.'" AND `template` = "'.$this->name.'"');
 			
-			if(!$update && $slotExists) {
+			if(!$update && $blockExists) {
 				continue;
 			}
 			
-			$modul->addPost('name', $name);
-			$modul->addPost('input', $slot['input']);
-			$modul->addPost('output', $slot['output']);
+			$this->installModule($block['module'], $update);
 			
-			if(!$slotExists) {
-				$modul->save();
-				$modul_id = $modul->insertId();			
-			} else {
-				$modul->setWhere('name="'.$name.'"');
-				$modul->update();
+			$blocks->addPost('name', $name);
+			$blocks->addPost('description', $block['description']);
+			$blocks->addPost('template', $this->name);
 				
-				$modul->result('SELECT id FROM '.sql::table('module').' WHERE name = "'.$name.'"');
-				$modul_id = $modul->get('id');
-			}
-			
-			$slots->addPost('name', $name);
-			$slots->addPost('description', $slot['description']);
-			$slots->addPost('template', $this->name);
-			$slots->addPost('modul', $modul_id);
-				
-			if(!$slotExists) {
-				$slots->save();
+			if(!$blockExists) {
+				$blocks->save();
 			} else {
-				$slots->setWhere('name="'.$name.'" AND template="'.$this->name.'"');
-				$slots->update();
+				$blocks->setWhere('name="'.$name.'" AND template="'.$this->name.'"');
+				$blocks->update();
 			}
 			
 		}
@@ -100,7 +126,7 @@ class template {
 			return false;	
 		}
 		
-		$this->installSlots($update);
+		$this->installBlocks($update);
 		
 		return true;
 				
@@ -110,7 +136,7 @@ class template {
 		
 		$select = formSelect::factory($name, $selected);
 		
-		foreach($this->get('templates', ['Default'=>'index.php']) as $name=>$file) {
+		foreach($this->get('views', $this->get('templates', ['Default'=>'index.php'])) as $name=>$file) {
 		
 			$select->add($file, $name);
 			

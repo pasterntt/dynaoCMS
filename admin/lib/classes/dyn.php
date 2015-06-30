@@ -16,15 +16,18 @@ class dyn {
 	}
 	
 	public static function has($name) {
-		
-		return array_key_exists($name, self::$params);
-		
+
+        if(empty(self::$params[$name]) && array_key_exists($name, self::$params))
+            return 0;
+        else
+            return 1;
+
 	}
 	
 	public static function get($name, $default = null) {
 		
 		if(self::has($name)) {
-	
+
 			return self::$params[$name];
 			
 		}
@@ -72,29 +75,30 @@ class dyn {
 		
 	}
 	
-	static public function checkVersion() {
+	static public function checkVersion($version1, $version2) {
+		
+		$version1 = str_replace(' ', '.', $version1);
+		$version2 = str_replace(' ', '.', $version2);
+		
+		if(version_compare($version1, $version2)  > 0)
+			return lang::get('version_fail_version');
+		else
+			return '';
+		
+	}
+	
+	static public function checkDynVersion() {
 		
 		$cacheFile = cache::getFileName(0, 'dynaoVersion');
 		
 		// jeden Tag
-		if(cache::exist($cacheFile, 86400)) {
+		if(cache::exist($cacheFile, 86400))
 			
 			$content = json_decode(cache::read($cacheFile), true);
 				
-		} else {
+		else {
 		
-			$server = 'http://api.dynao.de/version.json';
-			
-			$ch = curl_init($server);
-			curl_setopt($ch, CURLOPT_PORT, 80);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla (Statuscheck-Script)');
-			curl_setopt($ch, CURLOPT_TIMEOUT, 0);
-			curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 300);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$curl = curl_exec($ch);
-			curl_close($ch);
-			
-			$content = json_decode($curl, true);
+			$content = apiserver::getVersionFile();
 			
 			cache::write($content, $cacheFile);
 			
@@ -104,22 +108,7 @@ class dyn {
 			return lang::get('version_fail_connect');
 		}
 		
-		$version = explode('.', $content['current']['version']);
-		$cversion = explode('.', dyn::get('version'));
-		
-		if($version[0] != $cversion[0]) {		
-			return lang::get('version_fail_version1');
-		}
-		
-		if($version[1] != $cversion[1]) {
-			return lang::get('version_fail_version2');
-		}
-		
-		if($version[2] != $cversion[2]) {
-			return lang::get('version_fail_version3');	
-		}
-		
-		return true;
+		return self::checkVersion($content['current']['version'], dyn::get('version'));
 		
 	}
 	
@@ -134,18 +123,7 @@ class dyn {
 				
 		} else {
 		
-			$server = 'http://api.dynao.de/news.json';
-			
-			$ch = curl_init($server);
-			curl_setopt($ch, CURLOPT_PORT, 80);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla (Statuscheck-Script)');
-			curl_setopt($ch, CURLOPT_TIMEOUT, 0);
-			curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 300);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$curl = curl_exec($ch);
-			curl_close($ch);
-			
-			$content = json_decode($curl, true);
+			$content = apiserver::getNewsFile();
 			
 			cache::write($content, $cacheFile);
 			
@@ -178,18 +156,7 @@ class dyn {
 				
 		} else {
 		
-			$server = 'http://api.dynao.de/addons.json';
-			
-			$ch = curl_init($server);
-			curl_setopt($ch, CURLOPT_PORT, 80);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla (Statuscheck-Script)');
-			curl_setopt($ch, CURLOPT_TIMEOUT, 0);
-			curl_setopt($ch, CURLOPT_DNS_CACHE_TIMEOUT, 300);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$curl = curl_exec($ch);
-			curl_close($ch);
-			
-			$content = json_decode($curl, true);
+			$content = apiserver::getAddonFile();
 			
 			cache::write($content, $cacheFile);
 			
@@ -207,7 +174,7 @@ class dyn {
 		
 		$table->addSection('tbody');
 		
-		if(is_null($content)) {
+		if(is_null($content) || !$content) {
 			
 			$table->addRow()
 			->addCell(lang::get('no_entries'), ['colspan'=>4]);
@@ -230,6 +197,67 @@ class dyn {
 				->addCell($addon['title'])
 				->addCell($addon['description'])
 				->addCell('<a href="'.$addon['link'].'" target="_blank" class="btn btn-sm btn-default">'.lang::get('download').'</a>');
+						
+			}
+		
+		}
+		
+		return $table->show();
+		
+	}
+	
+	static public function getModules() {
+		
+		$cacheFile = cache::getFileName(0, 'dynaoModules');
+		
+		// jeden halben Tag
+		if(cache::exist($cacheFile, 43200)) {
+			
+			$content = json_decode(cache::read($cacheFile), true);
+				
+		} else {
+		
+			$content = apiserver::getModulesFile();
+			
+			cache::write($content, $cacheFile);
+			
+		}
+		
+		$table = table::factory(['class'=> ['table', 'table-spriped', 'table-hover']]);
+				
+		$table->addCollsLayout('60, 140, *, 110');
+		
+		$table->addRow()
+		->addCell(lang::get('vote'))
+		->addCell(lang::get('name'))
+		->addCell(lang::get('description'))
+		->addCell();
+		
+		$table->addSection('tbody');
+		
+		if(is_null($content) || !$content) {
+			
+			$table->addRow()
+			->addCell(lang::get('no_entries'), ['colspan'=>4]);
+			
+		} else {
+		
+			foreach($content as $addon) {
+				
+				$perc = round($addon['rate_sum'] / $addon['rate_ppl'] * 10);
+				
+				if($perc < 33)
+					$class = 'danger';
+				elseif($perc < 66)
+					$class = 'warning';
+				else
+					$class = 'success';
+				
+				$table->addRow()
+				->addCell('<span class="label label-'.$class.'">'.$perc.'%</span>')
+				->addCell($addon['title'])
+				->addCell($addon['description'])
+				->addCell('<a href="'.$addon['link'].'" target="_blank" class="btn btn-sm btn-default">'.lang::get('import').'</a>');
 						
 			}
 		

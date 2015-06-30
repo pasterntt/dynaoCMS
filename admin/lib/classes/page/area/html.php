@@ -3,13 +3,16 @@
 class pageAreaHtml {
 	
 	public static $modulList = [];
+	public static $modulListAll = [];
 
-	public static function selectBlock($structureID, $sort = false)  {
-	
+	public static function selectBlock($structureID, $sort = false, $block = false)  {
+		
+		$value = ($block) ? 'blocks' : 'pages';
+		
 		$return  = '<div class="structure-addmodul-box">';
 		$return .= '	<form action="index.php" method="get">';
 		$return .= '		<input type="hidden" name="page" value="structure" />';
-		$return .= '		<input type="hidden" name="subpage" value="pages" />';	
+		$return .= '		<input type="hidden" name="subpage" value="'.$value.'" />';	
 		$return .= '		<input type="hidden" name="structure_id" value="'.$structureID.'" />';
 		$return .= '		<input type="hidden" name="action" value="add" />';			
 		
@@ -18,7 +21,7 @@ class pageAreaHtml {
 		
 		$return .= '		<select name="modul" class="form-control">';
 		$return .= '		<option>'.lang::get('module_add').'</option>';
-		$return .= self::moduleList();
+		$return .= self::moduleList(false, $block);
 		$return .= '		</select>';
 		$return .= '	</form>';
 		$return .= '</div>';
@@ -27,24 +30,32 @@ class pageAreaHtml {
 		
 	}
 	
-	public static function moduleList($active = false) {
+	public static function moduleList($active = false, $blocks = false) {
+		
+		if(!$blocks) {
+			$where = ' WHERE `blocks` != 1';
+			$mlist = &self::$modulList;
+		} else {
+			$where = '';
+			$mlist = &self::$modulListAll;
+		}
 	
-		if(empty(self::$modulList)) {
+		if(empty($mlist)) {
 	
 			$sql = sql::factory();				
-			$sql->result('SELECT id, name FROM '.sql::table('module').' ORDER BY `sort`');
+			$sql->result('SELECT id, name FROM '.sql::table('module').$where.' ORDER BY `sort`');
 			while($sql->isNext()) {
 				
 				$selected = ($active && $active == $sql->get('id')) ? 'selected="selected"' : '' ;
 			
-				self::$modulList[] = '<option value="'.$sql->get('id').'" '.$selected.'>'.$sql->get('name').'</option>';
+				$mlist[] = '<option value="'.$sql->get('id').'" '.$selected.'>'.$sql->get('name').'</option>';
 			
 				$sql->next();
 			}
 			
 		}
 		
-		return implode(PHP_EOL, self::$modulList);
+		return implode(PHP_EOL, $mlist);
 		
 	}
 	
@@ -71,7 +82,7 @@ class pageAreaHtml {
 		} else {
 			
 			$form->setMode('add');	
-			$online = 1;			
+			$online = 1;
 			
 			$form->delButton('save-back');
 						

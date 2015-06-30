@@ -47,34 +47,244 @@
 	
 } (jQuery));
 
-$(document).ready(function () {
+$.dynField = function(options) {
+
+    var settings = $.extend({
+        list: false,
+        url: '',
+        wrap: '',
+        add: '',
+        del: '',
+        top: '',
+        up: '',
+        down: '',
+        bottom: '',
+        selectButton: '',
+    }, options);
+    var _wrap = $(settings.wrap),
+        _add = $(settings.add),
+        _del = $(settings.del);
+    if(settings.list) {
+        var _top = $(settings.top);
+        _up = $(settings.up);
+        _down = $(settings.down);
+        _bottom = $(settings.bottom);
+    }
+    var wrap_id = settings.wrap.replace(/\./g, "");
+    _add.click(function() {
+        var _this = $(this);
+        _this.closest(settings.wrap).attr('id', wrap_id+'-active');
+        openModal();
+        $('#'+wrap_id+'-select').find('.modal-body').load(settings.url);
+        $('#'+wrap_id+'-select').modal('show');
+    });
+    _del.click(function() {
+        if(settings.list) {
+            var selectForm = $(this).closest(settings.wrap).children('select'),
+                index = selectForm[0].selectedIndex;
+            selectForm.children('option').eq(index).remove().end().eq(index-1).attr('selected', 'selected');
+        } else {
+            console.log('del');
+            $(this).closest(settings.wrap).find('input').attr('value', '');
+        }
+    });
+    $(document.body).on("click", settings.selectButton, function() {
+        var _this = $(this),
+            name = _this.data('name'),
+            id = _this.data('id')
+        input_wrap = $('#'+wrap_id+'-active');
+        _this.button('loading');
+        setTimeout(function() {
+            _this.button('reset');
+        }, 300);
+        if(settings.list) {
+            input_wrap.find('select').append('<option value="'+id+'">"'+name+'"</option>');
+        } else {
+            input_wrap.find('input[type=hidden]:first').attr('value', id);
+            input_wrap.find('input[type=text]:first').attr('value', name);
+            $('#'+wrap_id+'-select').modal('hide');
+        }
+    });
+    $(document.body).on('hidden.bs.modal', '#'+wrap_id+'-select', function () {
+        $('#'+wrap_id+'-active').removeAttr('id');
+        $(this).remove();
+    })
+    if(settings.list) {
+        _up.click(function() {
+            var selectForm = $(this).closest(settings.wrap).children('select'),
+                index = selectForm[0].selectedIndex,
+                options = selectForm.children('option');
+            if(index < 1) {
+                return $(this);
+            }
+            var option = options.eq(index);
+            options.eq(index - 1).before('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
+            option.remove();
+        });
+        _down.click(function() {
+            var selectForm = $(this).closest(settings.wrap).children('select'),
+                index = selectForm[0].selectedIndex,
+                options = selectForm.children('option');
+            if(index == options.size()) {
+                return $(this);
+            }
+            var option = options.eq(index);
+            options.eq(index + 1).after('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
+            option.remove();
+        });
+        _top.click(function() {
+            var selectForm = $(this).closest(settings.wrap).children('select'),
+                index = selectForm[0].selectedIndex,
+                options = selectForm.children('option');
+            if(index == 0) {
+                return $(this);
+            }
+            var option = options.eq(index);
+            selectForm.prepend('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
+            option.remove();
+        });
+        _bottom.click(function() {
+            var selectForm = $(this).closest(settings.wrap).children('select'),
+                index = selectForm[0].selectedIndex,
+                options = selectForm.children('option');
+            if(index == options.size()) {
+                return $(this);
+            }
+            var option = options.eq(index);
+            selectForm.append('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
+            option.remove();
+        });
+        $('form').on('submit', function() {
+            var selectForm = $(settings.wrap).find('select');
+            if(selectForm.length) {
+                selectForm.attr('multiple', 'multiple');
+                selectForm.children('option').prop('selected', true);
+            }
+        });
+    }
+    function openModal() {
+        $('body').append('<div class="modal fade" id="'+wrap_id+'-select"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Struktur</h4></div><div class="modal-body"></div></div></div></div>');
+    }
+}
+
+function getAjaxLoad() {
+	
+	$('<div>').attr('id', 'loading-body').attr('hidden', true).appendTo('body').fadeIn(200);
+	$('<div>').attr('id', 'loading-spin').addClass('fa fa-spin fa-spinner').attr('hidden', true).appendTo('body').fadeIn(200);
+	
+}
+
+function removeAjaxLoad() {
+	$('#loading-body').remove();
+	$('#loading-spin').remove();	
+}
+
+$(document).ready(function() {
+	var body_width = window.innerHeight;
+    var _window = $(window);
+
+    _window.resize(function() {
+        body_width = window.innerHeight;
+    });
+	
+	$('#dropzone').dropzone({
+		url: "index.php?page=structure&subpage=module&action=import",
+		paramName: "file",
+		acceptedFiles: ".json",
+		init: function() {
+			this.on("success", function(file, data) {
+				$('#ajax-content').html(data).fadeIn(200);
+			});
+		}
+	});
+	
+	$('#left').on('leftClick', function(object,action) {
+        var _left = $(this);
+        action = action || auto;
+        console.log(action);
+        if(_left.hasClass('active') && (action == 'auto' || action == 'close')) {
+            _left.removeClass('active');
+			$('#head').removeClass('stay');
+            console.log('remove')
+        } else if(action == 'auto' || action == 'open') {
+            _left.addClass('active');
+			$('#head').addClass('stay');
+            console.log('add')
+        }
+
+	});
+	
+	$(window).swipe({
+	    swipeRight:function(event, direction, distance, duration, fingerCount) {
+            if(distance > 100 && body_width < 768) {
+                $('#left').trigger('leftClick', ['open']);
+            }
+	    },
+        swipeLeft:function(event, direction, distance, duration, fingerCount) {
+            if(distance > 100 && body_width < 768) {
+              $('#left').trigger('leftClick', ['close']);
+            }
+        }
+	});
+	
+	$(document).on('touchstart click', '#expand', function () {
+        $('#left').trigger('leftClick', ['auto']);
+	});
+	
+	$(document).on('touchstart click', '#panel', function () {
+		$('#panel').children('ul').fadeToggle();	
+	});
+	
+	$(document).on('touchstart click', '#idea button', function() {
+		var text = $('#idea textarea').val();
+		$.post('index.php?text='+encodeURIComponent(text), function(data) {
+			$('#ajax-content').html(data).fadeIn(200);
+		});	
+	});
+	
+	$(document).on('touchstart click', '#slide .expand', function() {
+		
+		var slide = $.session.get('slide');
+		
+		if(slide) {
+			
+			$('#slide .display').slideDown();
+			$('#slide .expand').html('<i class="fa fa-chevron-up"></i>');
+			
+			$.session.remove('slide');
+			
+		} else {
+			
+			$('#slide .display').slideUp();
+			$('#slide .expand').html('<i class="fa fa-chevron-down"></i>');
+			
+			$.session.set('slide', true);
+		}
+		
+	});
+	
+	if($.session.get('slide')) {
+		$('#slide .display').hide();
+		$('#slide .expand').html('<i class="fa fa-chevron-down"></i>');
+	}
+	
+	$("#head").headroom({
+		tolerance: 10,
+        offset : 205,
+        classes: {
+          initial: "slide",
+          pinned: "slide--reset",
+          unpinned: "slide--up"
+        }
+	});
 	
 	$('.form-back').click(function() {
 		 window.history.go(-1);
 	});
 	
-	$("#addonMobile").click(function() {
-		$(this).toggleClass('active');
-		$("#tools ul").toggleClass("display");	
-	});
+	$('.news h5 a').tooltip();
 	
-	$('#trash, .news h5 a').tooltip();
-	
-	$("#mobil").click(function() {
-		$("#subnavi ul.subnav").toggleClass("display");  
-		$("#subnavi").toggleClass("round");  
-	});
-	
-	$("#addon-mobil").click(function() {
-		$("#tools ul").toggleClass("display").toggleClass("round");		
-	});
-	
-	$("#user-mobil").click(function () {
-		$("#user").toggleClass("display");
-		$(this).toggleClass("active");
-	});
-	
-	$('.js-sort tbody').DynSorting();
+    $('.js-sort tbody').DynSorting();
 	$('#structure-content').DynSorting({children: 'li', handle: '.panel-heading'});
 	
 	$('.structure-addmodul-box select').change(function() {
@@ -118,146 +328,27 @@ $(document).ready(function () {
 		return false;
 		
 	});
-	
-	//
-	// formLink, formLinkList
-	//
-	
-	
-	$('.dyn-link-add, .dyn-linklist-add').on('click', function() {
-	var _this = $(this);
-		_this.closest('.dyn-link, .dyn-linklist').attr('id', 'dyn-link-active');
-	
-	
-	
-	$("body").append('<div class="modal fade" id="selectLink" tabindex="-1" role="dialog" aria-labelledby="selectLinkLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="selectLinkLabel">Struktur</h4></div><div class="modal-body"></div></div></div></div>');
-	
-	$(".modal-body").load('index.php?page=structure&subpage=popup');
-	
-	$('#selectLink').modal('show');
-		
-});
 
-$('.dyn-link-del').click(function() {	
-	$(this).closest('.dyn-link').find('input').removeAttr('value');
-});
+    $.dynField({
+        list: false,
+        url: 'index.php?page=structure&subpage=popup',
+        wrap: '.dyn-link',
+        add: '.dyn-link-add',
+        del: '.dyn-link-del',
+        selectButton: '.dyn-link-select'
+    });
 
-$('.dyn-linklist-del').on('click', function() {
-	
-	var selectForm = $(this).closest('.dyn-linklist').children('select'),
-		index = selectForm[0].selectedIndex;
-		
-	selectForm.children('option').eq(index).remove().end().eq(index-1).attr('selected', 'selected');
-	
-});
-	
+    $.dynField({
+        list: true,
+        url: 'index.php?page=structure&subpage=popup',
+        wrap: '.dyn-linklist',
+        add: '.dyn-linklist-add',
+        del: '.dyn-linklist-del',
+        top: '.dyn-linklist-top',
+        up: '.dyn-linklist-up',
+        down: '.dyn-linklist-down',
+        bottom: 'dyn-linklist-bottom',
+        selectButton: '.dyn-link-select'
+    });
 
-$('.dyn-linklist-up').on('click', function() {
-	
-	var selectForm = $(this).closest('.dyn-linklist').children('select'),
-		index = selectForm[0].selectedIndex,
-		options = selectForm.children('option');
-		
-	if(index  < 1) {
-		return $(this);	
-	}	
-	
-	var option = options.eq(index);
-	
-	options.eq(index - 1).before('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
-	option.remove();
-});
-
-$('.dyn-linklist-down').on('click', function() {
-	
-	var selectForm = $(this).closest('.dyn-linklist').children('select'),
-		index = selectForm[0].selectedIndex,
-		options = selectForm.children('option');
-		
-	if(index  == options.size()) {
-		return $(this);	
-	}		
-		
-	var option = options.eq(index);
-	
-	options.eq(index + 1).after('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
-	option.remove();
-});
-
-$('.dyn-linklist-bottom').on('click', function() {
-	
-	var selectForm = $(this).closest('.dyn-linklist').children('select'),
-		index = selectForm[0].selectedIndex,
-		options = selectForm.children('option');
-		
-	if(index  == options.size()) {
-		return $(this);	
-	}		
-		
-	var option = options.eq(index);
-	
-	selectForm.append('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
-	option.remove();
-});
-
-$('.dyn-linklist-top').on('click', function() {
-	
-	var selectForm = $(this).closest('.dyn-linklist').children('select'),
-		index = selectForm[0].selectedIndex,
-		options = selectForm.children('option');
-		
-	if(index  == 0) {
-		return $(this);	
-	}		
-		
-	var option = options.eq(index);
-	
-	selectForm.prepend('<option value="'+option.val()+'" selected="selected">'+option.text()+'</option>');
-	option.remove();
-});
-
-$('form').on('submit', function() {
-	var selectForm = $('.dyn-linklist').find('select');
-	if(selectForm.length) {
-		selectForm.attr('multiple', 'multiple');
-		selectForm.children('option').prop('selected', true);
-	}
-});
-
-$(document.body).on("click", '.dyn-link-select', function() {
-	
-	var _this = $(this),
-		name = _this.data('name'),
-		id = _this.data('id')
-		input_wrap = $('#dyn-link-active'),
-		tr = _this.closest('tr');
-	
-	_this.button('loading');
-	var interval = setInterval(function() {
-		_this.button('reset');
-		// Sich selbst auflösen, da Button mehrmals geklickt werden kann
-		clearInterval(interval);
-	}, 300);
-	
-	if(input_wrap.children('select').length == 1) {
-		
-		input_wrap.find('select').append('<option value="'+id+'">"'+name+'"</option>');		
-		
-	} else {
-		
-		input_wrap.find('input[type=hidden]:first').val(id);
-		input_wrap.find('input[type=text]:first').val(name);
-		
-		$('#selectLink').modal('hide');
-	}
-	
-});
-
-$(document).on('hidden.bs.modal', '#selectLink', function () {
-	$('#dyn-link-active').removeAttr('id');
-	$(this).remove();	
-})
-
-
-	
 });

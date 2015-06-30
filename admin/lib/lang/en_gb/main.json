@@ -14,7 +14,8 @@
 	"select":					"Select",
 	"selected":					"Selected",
 	"description":				"Description",
-	"access_denied":			"Access denied!",	
+	"access_denied":			"Access denied!",
+	"support_visit":			"Visit support",	
 	
 	#Aktionen
 	"update":					"Update",
@@ -25,6 +26,7 @@
 	"back":						"Back",
 	"apply":					"Apply",
 	"try_again":				"Try again",
+	"logout":					"Logout",
 	
 	#Misc
 	"save_status":				"Status successfully changed",
@@ -35,7 +37,8 @@
 	"connection_again":			"Connection has been made again",
 	"template":					"Template",
 	"dashboard":				"Dashboard",
-	"addon_navi":				"Addon Navi",
+	"addon_navi":				"Addons",
+	"main_navi":				"Navigation",
 	"visit_site":				"Visit website",
 	"read_more":				"Read more",
 	"download":					"Download",
@@ -45,6 +48,7 @@
 	"start":					"start",
 	"close":					"close",
 	"really_delete":			"really delete?",
+	"status":					"Status",
 	
 	#Kategorien
 	"category_save":			"Save category",
@@ -65,9 +69,7 @@
 	
 	#Versioncheck
 	"version_fail_connect":		"Connection to the server could not be established",
-	"version_fail_version1":	"You are using an outdated version",
-	"version_fail_version2":	"You are using an outdated minor version",
-	"version_fail_version3":	"You are using an outdated minor version",
+	"version_fail_version":	"You are using an outdated version",
 	
 	#Login	
 	"login_form_notfull":		"Form was not completely sent!",
@@ -76,6 +78,21 @@
 	"login_remember":			"Remember me",
 	"login_pwd_forget":			"Forget your password ?",
 	"login_logout_success":		"Logged out successfully",
+	
+	#Dashboard
+	"numpages":						"Pages available",
+	"nummodule":						"Modules available",
+	"numaddons":						"Addons available",
+	"numblocks":						"Blocks available",
+	"page_add":							"Add page",
+	"module_add":							"Create module",
+	"block_add":							"Add block",
+	"your_idea":							"Your idea",
+	"idea_text":							"<strong>dynao CMS</strong> is currently at beta status and is still under development - and you can affect the CMS with your ideas! Send us a description of your idea and we will take a look (of course you can also use our <a target='_blank' href='http://dynao.de/forum'> Forum</a>):",
+	"idea_send":						"Idea send, thanks!",
+	"idea_error":						"Can not be send",
+	"idea_empty":						"Please insert text",
+	"send":								"Send",
 	
 	#Addon
 	"addons":					"Addons",
@@ -111,7 +128,7 @@
 	"start_page":				"Startpage",
 	"error_page":				"Errorpage",
 	"delete_cache":				"Delete cache",
-	"load_template":			"Load template config",
+	"load_template":			"Load template",
 	"delete_cache_success":		"Cache completely deleted",
 	"load_template_success":	"Template config loaded",
 	"load_template_failed":		"Cant load template config",
@@ -122,8 +139,9 @@
 	"structure_delete":			"Page successfully deleted",
 	"article":					"Page",
 	"article_save":				"Save page",
-	"structure":				"Structure",
+	"content":				"Content",
 	"pages":					"Pages",
+	"visit_page":				"Visit page",
 	
 	#Modul
 	"modul_php_error":			"The code module has a PHP error and therefore can not be executed",
@@ -131,15 +149,24 @@
 	"block_status":				"Block status",
 	"module":					"Module",
 	"modules":					"Modules",
+	"all_modules":				"All modules",
 	"module_deleted":			"Module successfully deleted",
+	"module_export":			"Modul export successful - download started",
+	"import":					"Import",
+	"export":					"Export",
 	"module_in_use":			"The module is still in use",
-	
-	#Slots
-	"slots_current_page":		"Slots at the current template",
-	"slots":					"slots",
-	"slot_name_not_exist":		"[The slot \"%s\" does not exist]",
-	"slots_show":				"Show in",
-	"slot_deleted":				"Slot successfully deleted",
+	"module_more":				"More modules",
+	"module_install_success":		"Modul \"%s\" successfully installed",
+
+
+	#Blocks
+	"blocks_current_page":		"Blocks at the current template",
+	"blocks":					"Blocks",
+	"block_name_not_exist":		"[The block \"%s\" does not exist]",
+	"blocks_show":				"Show in",
+	"block_deleted":			"Block successfully deleted",
+	"all_pages":			"All pages",
+	"only_blocks":		"Only blocks",
 	
 	#User
 	"user_wrong_email":			"Please enter a valid email address",
@@ -152,6 +179,7 @@
 	"user_email_empty":			"E-Mail field must not be empty",
 	"user_password_empty":		"Password field must not be empty",
 	"user_deleted":			"User successfully deleted",
+	"user_self_deleted":				"You cant delete your own account",
 	
 	#SQL
 	"sql_query_error":			"Query could not be executed<pre>%s</pre>Error: %s",

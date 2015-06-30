@@ -1,20 +1,33 @@
 <?php
 class install {
 	
+	public static function update0_1to0_2() {
+
+        $sql = sql::factory();
+		$sql->query('ALTER TABLE '.sql::table('module').' ADD `blocks` int(1) unsigned NOT NULL');
+        $sql->query('ALTER TABLE '.sql::table('user').' ADD `salt` VARCHAR(255) NOT NULL');
+        $sql->query('ALTER TABLE '.sql::table('structure_area').' ADD `block` int(1) NOT NULL AFTER `id`');
+        $sql->query('ALTER TABLE '.sql::table('structure').' ADD `createdAt` DATETIME NOT NULL,
+        ADD `updatedAt` DATETIME NOT NULL');
+
+
+    }
+	
 	public static function newInstall() {
 		
 		$sql = new sql();
-		$sql->query('DROP TABLE `'.sql::table('module').'`');
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('module').'`');
 		$sql->query('CREATE TABLE `'.sql::table("module").'` (
 		  `id` 			int(16)		unsigned 	NOT NULL 	auto_increment,
 		  `name`		varchar(255) 			NOT NULL,
 		  `input` 		text 					NOT NULL,
 		  `output`		text 					NOT NULL,
+		  `blocks`		int(1)		unsigned 	NOT NULL,
 		  `sort`		int(16)		unsigned 	NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 		
-		$sql->query('DROP TABLE `'.sql::table('structure').'`');				
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('structure').'`');				
 		$sql->query('CREATE TABLE `'.sql::table("structure").'` (
 		  `id` 			int(16)		unsigned	NOT NULL 	auto_increment,
 		  `name`		varchar(255) 			NOT NULL,
@@ -22,33 +35,38 @@ class install {
 		  `sort`		int(16)		unsigned	NOT NULL,
 		  `parent_id`	int(16)		unsigned	NOT NULL,
 		  `online`		int(1)		unsigned	NOT NULL,
+		  `createdAt`	DATETIME                NOT NULL,
+		  `updatedAt`	DATETIME                NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 								
-		$sql->query('DROP TABLE `'.sql::table('user').'`');
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('user').'`');
 		$sql->query('CREATE TABLE `'.sql::table("user").'` (
 		  `id` 			int(11) 	unsigned	NOT NULL	auto_increment,
 		  `firstname` 	varchar(255)			NOT NULL,
 		  `name` 		varchar(255)			NOT NULL,
 		  `email` 		varchar(255)			NOT NULL,
 		  `password`	varchar(255)			NOT NULL,
+		  `salt` 		varchar(255)			NOT NULL,
 		  `perms`		varchar(255)			NOT NULL,
 		  `admin`		int(1) 		unsigned	NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 								
-		
+		$salt = userLogin::generateSalt();
 		$sql->setTable('user');
 		$sql->addPost('firstname', type::post('firstname'));
 		$sql->addPost('name', type::post('name'));
 		$sql->addPost('email', type::post('email'));
-		$sql->addPost('password', userLogin::hash(type::post('password')));
+		$sql->addPost('password', userLogin::hash(type::post('password'), $salt));
+		$sql->addPost('salt', $salt);
 		$sql->addPost('admin', 1);
 		$sql->save();
 		
-		$sql->query('DROP TABLE `'.sql::table('structure_area').'`');				
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('structure_area').'`');				
 		$sql->query('CREATE TABLE `'.sql::table("structure_area").'` (
 		  `id`			int(16)		unsigned	NOT NULL		auto_increment,
+		  `block`		int(1)		unsigned	NOT NULL,
 		  `structure_id`int(16) 	unsigned	NOT NULL,
 		  `sort`		int(16)		unsigned	NOT NULL,
 		  `modul`		int(16)		unsigned	NOT NULL,
@@ -93,7 +111,7 @@ class install {
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 		
-		$sql->query('DROP TABLE `'.sql::table('addons').'`');				
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('addons').'`');				
 		$sql->query('CREATE TABLE `'.sql::table("addons").'` (
 		  `id` 			int(11) 	unsigned	NOT NULL	auto_increment,
 		  `name` 		varchar(255)			NOT NULL,
@@ -102,52 +120,14 @@ class install {
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 		
-		$sql->query('DROP TABLE `'.sql::table('slots').'`');				
-		$sql->query('CREATE TABLE `'.sql::table("slots").'` (
+		$sql->query('DROP TABLE IF EXISTS `'.sql::table('blocks').'`');				
+		$sql->query('CREATE TABLE `'.sql::table("blocks").'` (
 		  `id` 			int(11) 	unsigned	NOT NULL	auto_increment,
 		  `name` 		varchar(255)			NOT NULL,
 		  `description`	varchar(255)			NOT NULL,
 		  `template` 	varchar(255)			NOT NULL,
-		  `modul`	 	int(11)		unsigned	NOT NULL,
 		  `is-structure`int(1)		unsigned	NOT NULL	DEFAULT "1",
 		  `structure` 	varchar(255)			NOT NULL,
-		  `value1` 		text 					NOT NULL,
-		  `value2` 		text					NOT NULL,
-		  `value3` 		text 					NOT NULL,
-		  `value4` 		text					NOT NULL,
-		  `value5` 		text					NOT NULL,
-		  `value6` 		text 					NOT NULL,
-		  `value7`		text 					NOT NULL,
-		  `value8` 		text 					NOT NULL,
-		  `value9` 		text 					NOT NULL,
-		  `value10` 	text 					NOT NULL,
-		  `value11` 	text 					NOT NULL,
-		  `value12` 	text 					NOT NULL,
-		  `value13` 	text 					NOT NULL,
-		  `value14` 	text 					NOT NULL,
-		  `value15` 	text 					NOT NULL,
-		  `link1` 		int(11)					NOT NULL,
-		  `link2` 		int(11)					NOT NULL,
-		  `link3` 		int(11)					NOT NULL,
-		  `link4` 		int(11)					NOT NULL,
-		  `link5` 		int(11)					NOT NULL,
-		  `link6` 		int(11)					NOT NULL,
-		  `link7`		int(11)					NOT NULL,
-		  `link8` 		int(11)					NOT NULL,
-		  `link9` 		int(11)					NOT NULL,
-		  `link10` 		int(11)					NOT NULL,
-		  `linklist1`	varchar(255)			NOT NULL,
-		  `linklist2` 	varchar(255)			NOT NULL,
-		  `linklist3` 	varchar(255) 			NOT NULL,
-		  `linklist4` 	varchar(255)			NOT NULL,
-		  `linklist5` 	varchar(255)			NOT NULL,
-		  `linklist6` 	varchar(255)			NOT NULL,
-		  `linklist7`	varchar(255)			NOT NULL,
-		  `linklist8` 	varchar(255)			NOT NULL,
-		  `linklist9` 	varchar(255) 			NOT NULL,
-		  `linklist10`	varchar(255) 			NOT NULL,
-		  `php1` 		text 					NOT NULL,
-		  `php2` 		text 					NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;');
 		

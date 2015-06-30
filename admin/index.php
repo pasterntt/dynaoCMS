@@ -6,8 +6,8 @@ ob_implicit_flush(0);
 mb_internal_encoding('UTF-8');
 session_start();
 
-if(version_compare(PHP_VERSION, 5.4) < 0) {
-    echo 'PHP version 5.4 or higher needed!';
+if(version_compare(PHP_VERSION, 5.6) < 0) {
+    echo 'PHP version 5.6 or higher needed!';
 	exit();
 }
 
@@ -56,6 +56,7 @@ dyn::add('user', new user(userLogin::getUser()));
 
 cache::setCache(dyn::get('cache'));
 
+addonConfig::loadAllConfig();
 addonConfig::includeAllLangFiles();
 addonConfig::includeAllLibs();
 

@@ -1,11 +1,12 @@
-$('#structure-tree li').prepend('<div class="dropzone"></div>');
+$('#structure-tree li div.handle').parent().prepend('<div class="droppages"></div>');
 
-    $('#structure-tree .handle, #structure-tree .dropzone').droppable({
+function makeDroppable() {
+    $('#structure-tree .handle, #structure-tree .droppages').droppable({
         accept: '#structure-tree li',
         tolerance: 'pointer',
         drop: function(e, ui) {
             var li = $(this).parent();
-            var child = !$(this).hasClass('dropzone');
+            var child = !$(this).hasClass('droppages');
             if (child && li.children('ul').length == 0) {
                 li.append('<ul/>');
             }
@@ -16,7 +17,7 @@ $('#structure-tree li').prepend('<div class="dropzone"></div>');
                 li.before(ui.draggable);
             }
 			$('#structure-tree li.sm2_liOpen').not(':has(li:not(.ui-draggable-dragging))').removeClass('sm2_liOpen');
-            li.find('.handle,.dropzone').css({ backgroundColor: '', borderColor: '' });
+            li.find('.handle,.droppages').css({ backgroundColor: '', borderColor: '' });
 			
 			var object = $('#structure-tree');
 					
@@ -58,20 +59,22 @@ $('#structure-tree li').prepend('<div class="dropzone"></div>');
 			};
 			
 			var getString = document.location.search.substr(1,document.location.search.length);
-			
-			$('#ajax-content').fadeOut(200);
 			setTimeout(function() {
+				getAjaxLoad();
 				$.post('index.php?'+getString, {array: returnArray() }, function(data) {
-					$('#ajax-content').html(data).fadeIn(200);
+					$('#structure-body .panel-body').html(data);
+					$('#structure-tree li div.handle').parent().prepend('<div class="droppages"></div>');
+					makeDroppable();
+					removeAjaxLoad();
 				});
 			}, 0);
 			
         },
         over: function() {
-            $(this).filter('.handle, .dropzone').css({ backgroundColor: '#ccc' });
+            $(this).filter('.handle, .droppages').css({ backgroundColor: '#ccc' });
         },
         out: function() {
-            $(this).filter('.handle, .dropzone').css({ backgroundColor: '' });
+            $(this).filter('.handle, .droppages').css({ backgroundColor: '' });
         }
     });
 	
@@ -82,3 +85,7 @@ $('#structure-tree li').prepend('<div class="dropzone"></div>');
         helper: 'clone',
         zIndex: 100,
     });
+	
+}
+
+makeDroppable();

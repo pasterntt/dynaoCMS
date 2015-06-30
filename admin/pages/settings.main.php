@@ -1,16 +1,19 @@
 <?php
 if($action == 'deleteCache') {
 	cache::clear();
+	pageCache::clearAll();
 	extension::get('SETTINGS_DELETE_CACHE');
 	echo message::success(lang::get('delete_cache_success'), true);	
 }
 if($action == 'loadTemplate') {
+	
 	$template = new template(dyn::get('template'));
 	if($template->install(true) !== true) {
 		echo message::danger(lang::get('load_template_failed'), true);
 	} else {
 		echo message::success(lang::get('load_template_success'), true);
-	}	
+	}
+	
 }
 ?>
 <div class="row">	
@@ -36,7 +39,11 @@ if($action == 'loadTemplate') {
 				
 				if($form->isSubmit()) {
 					
-					$url = 'http://'.str_replace('http://', '', $form->get('hp_url'));
+					if(substr($form->get('hp_url'), 0, 5) == 'https')
+						$url = 'https://'.str_replace(['http://', 'https://'], '', $form->get('hp_url'));
+					else
+						$url = 'http://'.str_replace(['http://', 'https://'], '', $form->get('hp_url'));
+						
 					$endSlash = substr($url, -1, 1);
 					
 					if($endSlash != '/') {
@@ -71,13 +78,11 @@ if($action == 'loadTemplate') {
 				$field->fieldName(lang::get('settings_backend_lang'));
 							
 				$handle = opendir(dir::backend('lib'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR));
-				while($file = readdir($handle)) {
-						
-						if(in_array($file, ['.', '..']))
-							continue;
-						
-						$field->add($file, $file);
-				}
+                foreach(lang::ListLang() as $lang) {
+
+                    $field->add($lang['short'], $lang['readable']);
+
+                }
 				
 				$field = $form->addSelectField('template', dyn::get('template'));
 				$field->fieldName(lang::get('template'));
@@ -164,7 +169,7 @@ if($action == 'loadTemplate') {
 			->addCell($template->get('version'));
 			
 			$table->addRow()
-			->addCell('<a href="'.$template->get('supportlink').'" class="btn btn-sm btn-default btn-block" target="_blank">Support besuchen</a>', ['colspan'=>2]);	
+			->addCell('<a href="'.$template->get('supportlink').'" class="btn btn-sm btn-default btn-block" target="_blank">'.lang::get('support_visit').'</a>', ['colspan'=>2]);	
 			
 			echo $table->show();
 			

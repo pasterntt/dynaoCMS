@@ -85,12 +85,17 @@ class pageMisc {
 						<span class="btn-group">'.$online.$edit.$delete.'</span>'.PHP_EOL.'
 					</div>'.PHP_EOL;
 				
-				$select .= self::getTreeStructurePage($sql->get('id'), $lvl+1);			
+				$select .= self::getTreeStructurePage($sql->get('id'), $lvl+1);
 				
+				if($sql->counter+1 == $sql->num()) {
+					$select .= '<div class="droppages"></div>';
+				}
 				$select .= '</li>'.PHP_EOL;
 				
 				$sql->next();
 			}
+			
+			
 			
 			$select .= '</ul>';
 			
@@ -141,25 +146,41 @@ class pageMisc {
 	
 	public static function sortStructure($sort, $pid = 0) {
 			
-			$sql = sql::factory();
-			$sql->setTable('structure');
-			$i = 1;
-			foreach($sort as $name=>$value) {
-				
-				$sql->addPost('sort', $i);
-				$sql->addPost('parent_id', $pid);
-				$sql->setWhere('id='.$value['id']);
-				$sql->update();				
-				
-				if(isset($value['children']) && count($value['children'])) {
-					
-					self::sortStructure($value['children'], $value['id']);	
-				}
-				
-				$i++;
+	    $sql = sql::factory();
+		$sql->setTable('structure');
+		$i = 1;
+		foreach($sort as $name=>$value) {
+
+			$sql->addPost('sort', $i);
+			$sql->addPost('parent_id', $pid);
+			$sql->setWhere('id='.$value['id']);
+			$sql->update();
+
+			if(isset($value['children']) && count($value['children'])) {
+
+				self::sortStructure($value['children'], $value['id']);
+
 			}
-			
+
+			$i++;
 		}
+			
+	}
+
+    public static function updateTime($id, $created = false) {
+
+        $sql = sql::factory();
+        $sql->setTable('structure');
+        $sql->setWhere('id='.$id);
+        $sql->addDatePost('updatedAt');
+
+        if($created) {
+            $sql->addDatePost('createdAt');
+        }
+
+        $sql->update();
+
+    }
 	
 }
 

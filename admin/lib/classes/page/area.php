@@ -6,6 +6,8 @@ class pageArea {
 	public $isNew;
 	public $sql;
 	
+	public $eval = true;
+	
 	public static $types = [
 		'varsValue',
 		'varsLink',
@@ -14,26 +16,29 @@ class pageArea {
 	];
 		
 
-	public function __construct($id) {
+	public function __construct($sql) {
 		
-		if(is_object($id) && is_a($id, 'sql')) {
+		try {
 			
-			$this->setSql($id);
+			if(!(is_object($sql) && is_a($sql, 'sql'))) {
+				throw new InvalidArgumentException(__CLASS__.'::__construct Parameter muss SQL Object sein');
+			}
 			
-		} else {
+			$this->sql = $sql;	
+			
+			$this->setNew($this->sql->num() == 0);		
+			
+		} catch(InvalidArgumentException $e) {
+			echo $e->getMessage();
+		}		
 		
-			$this->sql = sql::factory();
-			$this->sql->query('SELECT * FROM '.sql::table('structure_area').' WHERE id = '.$id)->result();		
-		
-		}
-		
-		$this->setNew($this->sql->num() == 0);
 	}
+	
 	
 	public static function addType($class) {
 		
 		if(!class_exists($class, false)) {
-			//throw new Exception(PageArea-Typ muss eine Klasse sein	
+			throw new InvalidArgumentException(__CLASS__.'::'.__METHOD__.' 1. Parameter erwartet eine vorhandene Klasse');
 		}
 		self::$types[] = $class;
 			
@@ -47,12 +52,18 @@ class pageArea {
 		
 	}
 	
-	public function setSql(sql $sql) {
+	public function isNew() {
 		
-		$this->sql = $sql;
+		return $this->isNew;
+			
+	}
+	
+	public function setEval($bool) {
+	
+		$this->eval = $bool;
 		
 		return $this;
-				
+		
 	}
 	
 	public function get($value) {
@@ -132,8 +143,10 @@ class pageArea {
 	
 	public function isLastBlock() {
 		
+		$block = ($this->block) ? 1 : 0;
+		
 		$sql = sql::factory();
-		$sql->query('SELECT sort FROM '.sql::table('structure_area').' WHERE structure_id = '.$this->getStructureId());
+		$sql->query('SELECT sort FROM '.sql::table('structure_area').' WHERE block = '.$block.' AND structure_id = '.$this->getStructureId());
 			
 		return $sql->num() == $this->getSort();
 		
@@ -142,7 +155,7 @@ class pageArea {
 	
 	////////////////////// Eingabe/Ausgabe Dynamisch machen
 	
-	protected function getEval($content) {
+	public static function getEval($content) {
 		
 		ob_start();
 		ob_implicit_flush(0);
@@ -163,8 +176,16 @@ class pageArea {
 	
 	public function OutputFilter($content, $sql) {
 		
-		if(!is_object($sql)) // SQL Muss Objekt sein
-			return $content;
+			
+		try {
+			
+			if(!(is_object($sql) && is_a($sql, 'sql'))) {
+				throw new Exception(__CLASS__.'::__construct Parameter muss SQL Object sein');
+			}
+			
+		} catch(Exception $e) {
+			echo $e->getMessage();	
+		}
 		
 		foreach(self::$types as $class) {
 			$class = new $class($content);
@@ -185,7 +206,9 @@ class pageArea {
 		
 		$content = str_replace(['//DYN-NOT-EVAL-END', '//DYN-NOT-EVAL'], '', $content);
 		
-		$content = $this->getEval($content);
+		if($this->eval) {
+			$content = self::getEval($content);
+		}
 		
 		return $content;
 		

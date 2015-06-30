@@ -15,6 +15,7 @@
 	"selected":					"Ausgewählt",
 	"description":				"Beschreibung",
 	"access_denied":			"Zugriff verweigert!",
+	"support_visit":			"Support besuchen",
 	
 	#Aktionen
 	"update":					"Aktualisieren",
@@ -25,6 +26,7 @@
 	"back":						"Zurück",
 	"apply":					"Übernehmen",
 	"try_again":				"Erneut versuchen",
+	"logout":					"Abmelden",
 	
 	#Misc
 	"save_status":				"Status erfoglreich geändert",
@@ -35,7 +37,8 @@
 	"connection_again":			"Verbindung wurde erneut hergestellt",
 	"template":					"Template",
 	"dashboard":				"Dashboard",
-	"addon_navi":				"Addon Navi",
+	"addon_navi":				"Addons",
+	"main_navi":				"Navigation",
 	"visit_site":				"Seite besuchen",
 	"read_more":				"Weiterlesen",
 	"download":					"Download",
@@ -43,8 +46,9 @@
 	"author":					"Ersteller",
 	"version":					"Version",
 	"start":					"Start",
-	"close":					"schließen",
+	"close":					"Schließen",
 	"really_delete":			"Wirklich löschen?",
+	"status":					"Status",
 	
 	#Kategorien
 	"category_save":			"Kategorie speichern",
@@ -65,9 +69,7 @@
 	
 	#Versioncheck
 	"version_fail_connect":		"Verbindung zum Server konnte nicht hergestellt werden",
-	"version_fail_version1":	"Sie verwenden eine veraltete Version",
-	"version_fail_version2":	"Sie verwenden eine veraltete Nebenversion",
-	"version_fail_version3":	"Sie verwenden eine veraltete Minor-Version",
+	"version_fail_version":	"Sie verwenden eine veraltete Version",
 	
 	#Login	
 	"login_form_notfull":		"Formular wurde nicht vollständig gesendet!",
@@ -76,6 +78,21 @@
 	"login_remember":			"Login merken",
 	"login_pwd_forget":			"Passwort vergessen ?",
 	"login_logout_success":		"Erfolgreich ausgeloggt",
+	
+	#Dashboard
+	"numpages":						"Seiten vorhanden",
+	"nummodule":						"Module vorhanden",
+	"numaddons":						"Addons vorhanden",
+	"numblocks":						"Blöcke vorhanden",
+	"page_add":							"Seite hinzufügen",
+	"module_add":							"Modul erstellen",
+	"block_add":							"Block erstellen",
+	"your_idea":							"Deine Idee",
+	"idea_text":							"<strong>dynao CMS</strong> ist momentan im Beta - Status und wird stets weiterentwickelt - und du kannst dich einbringen und das CMS mit deinen Ideen beeinflussen! Sende uns hier eine kurze Beschreibung und wir setzen uns damit auseinander (natürlich kannst du auch unser <a target='_blank' href='http://dynao.de/forum'>Forum</a> nutzen):",
+	"idea_send":						"Idee gesendet, danke!",
+	"idea_error":						"Konnte nicht verschickt werden",
+	"idea_empty":						"Bitte Text eingeben",
+	"send":								"Senden",
 	
 	#Addon
 	"addons":					"Addons",
@@ -111,7 +128,7 @@
 	"start_page":				"Startseite",
 	"error_page":				"Fehlerseite",
 	"delete_cache":				"Cache löschen",
-	"load_template":			"Template-Config laden",
+	"load_template":			"Template laden",
 	"delete_cache_success":		"Cache komplett gelöscht",
 	"load_template_success":	"Template-Config geladen",
 	"load_template_failed":		"Template-Config nicht geladen",
@@ -122,8 +139,9 @@
 	"structure_delete":			"Artikel erfolgreich gelöscht",
 	"article":					"Artikel",
 	"article_save":				"Artikel speichern",
-	"structure":				"Struktur",
+	"content":				"Inhalt",
 	"pages":					"Seiten",
+	"visit_page":				"Seite besuchen",
 	
 	#Modul
 	"modul_php_error":			"Der Modulcode hat einen PHP Fehler und kann deshalb nicht ausgeführt werden",
@@ -131,17 +149,25 @@
 	"block_status":				"Block Status",
 	"module":					"Modul",
 	"modules":					"Module",
+	"all_modules":				"Alle Module",
 	"input":					"Eingabe",
 	"output":					"Ausgabe",
 	"module_deleted":			"Modul erfolgreich gelöscht",
+	"module_export":			"Modul erfolgreich exportiert - Download gestartet",
+	"import":					"Importieren",
+	"export":					"Exportieren",
 	"module_in_use":			"Das Modul wird noch verwendet",
-	
-	#Slots
-	"slots_current_page":		"Slots im aktuellen Template",
-	"slots":					"Slots",
-	"slot_name_not_exist":		"[Der Slot \"%s\" existiert nicht]",
-	"slots_show":				"Anzeigen in",
-	"slot_deleted":				"Slot erfolgreich gelöscht",
+	"module_more":				"Weitere Module",
+	"module_install_success":		"Modul \"%s\" erfolgreich installiert",
+    "failed_plugins_load":      "Das Laden von %s Plugins schlug fehl. Bitte prüfen Sie, ob die benötigten Dateien vorhanden sind!",
+	#Block
+	"blocks_current_page":		"Blöcke im aktuellen Template",
+	"blocks":					"Blöcke",
+	"block_name_not_exist":		"[Der Block \"%s\" existiert nicht]",
+	"blocks_show":				"Anzeigen in",
+	"block_deleted":			"Block erfolgreich gelöscht",
+	"all_pages":			"Alle Seiten",
+	"only_blocks":		"Nur für Blöcke",
 	
 	#User
 	"user_wrong_email":			"Bitte geben Sie eine gültige E-Mail-Adresse an",
@@ -154,6 +180,7 @@
 	"user_email_empty":			"Das E-Mail-Feld darf nicht leer sein",
 	"user_password_empty":		"Das Passwort-Feld darf nicht leer sein",
 	"user_deleted":				"Benutzer erfolgreich gelöscht",
+	"user_self_deleted":				"Eigener Account kann nicht gelöscht werden",
 	
 	#SQL
 	"sql_query_error":			"Query konnte nicht ausgeführt werden<pre>%s</pre>Error: %s",

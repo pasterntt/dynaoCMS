@@ -1,15 +1,17 @@
 <?php
 
-layout::addCSS('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Open+Sans+Condensed:300,700');
-layout::addCSS('http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css');
-layout::addCSS('http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css');
-
+layout::addCSS('//fonts.googleapis.com/css?family=Lato:300,400,700');
+layout::addCSS('//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+layout::addCSS('//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
 layout::addCSS('layout/css/style.css');
-layout::addCSS('layout/css/mobile.css');
 
-layout::addJS('http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js');
-layout::addJS('http://code.jquery.com/ui/1.10.3/jquery-ui.js');
-layout::addJS('http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js');
+layout::addJS('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js');
+layout::addJS('//code.jquery.com/ui/1.10.3/jquery-ui.js');
+layout::addJS('//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js');
+layout::addJS('layout/js/session.js');
+layout::addJS('layout/js/headroom.js');
+layout::addJS('layout/js/swipe.js');
+layout::addJS('layout/js/dropzone.js');
 layout::addJS('layout/js/scripts.js');
 
 userPerm::add('page[edit]', lang::get('page[edit]'));
@@ -27,7 +29,7 @@ if(
 	dyn::get('user')->hasPerm('page[content]') ||
 	dyn::get('user')->hasPerm('page[module]')
 ) {
-	backend::addNavi(lang::get('structure'), url::backend('structure'), 'list');
+	backend::addNavi(lang::get('content'), url::backend('structure'), 'list');
 }
 
 if(dyn::get('user')->hasPerm('admin[user]')) {
@@ -41,9 +43,17 @@ if(dyn::get('user')->hasPerm('admin[addon]')) {
 if(dyn::get('user')->isAdmin()) {
 	backend::addNavi(lang::get('settings'), url::backend('settings'), 'cogs');
 }
-
+$failed_plugins = 0;
 foreach(addonConfig::includeAllConfig() as $file) {
-	include($file);	
+    if(file_exists($file)){
+        require_once($file);
+    }else{
+        $failed_plugins++;
+    }
+
+}
+if($failed_plugins >0){
+    echo message::warning(lang::get(sprintf('failed_plugins_load'), $failed_plugins));
 }
 
 $page = type::super('page', 'string', 'dashboard');
@@ -59,7 +69,9 @@ if(!is_null($errorMsg)) {
 }
 
 if(userLogin::isLogged()) {
-	include(backend::getNaviInclude());	
+	if($file = backend::getNaviInclude()) {
+		include($file);	
+	}
 }
 
 $content = ob_get_contents();

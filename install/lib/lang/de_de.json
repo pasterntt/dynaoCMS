@@ -4,7 +4,7 @@
 	"ok":					"Ok",
 	"status":				"Status",
 	"php_version":			"PHP Version",
-	"php_version_54":		"Es wird mindestens PHP Version 5.4 benötigt",
+	"php_version_required":		"Es wird mindestens PHP Version 5.6 benötigt",
 	"chmod_755":			"Chmod 0755 benötigt",
 	"php_ext": 				"PHP Extension %s konnte nicht geladen werden",
 	"installation":			"Installation",
@@ -20,6 +20,8 @@
 	"install_delete":		"Bitte <strong>löschen</strong> Sie den Installations-Ordner \"/install\"!",
 	"dynao_site":			"dynaoCMS Webseite",
 	"dynao_forum":			"dynaoCMS Forum",
-	"visit_admin":			"Admin Login"
-
+	"visit_admin":			"Admin Login",
+	"repeat_password":		"Passwort (Wiederholung)",
+	"not_same_password":	"Passwörter stimmen nicht überein",
+  "dependencies_not_met": "Die geforderten Abhängigkeiten konnten nicht gefunden werden!"
 }

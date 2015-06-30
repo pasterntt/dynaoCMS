@@ -23,7 +23,19 @@ abstract class formField {
 		$this->validator = validator::factory();
 		
 	}
-	
+
+    public function setName($name) {
+
+        $this->name = $name;
+
+    }
+
+    public function setValue($value) {
+
+        $this->value = $value;
+
+    }
+
 	public function setSuffix($suffix) {
 		
 		$this->suffix = $suffix;
@@ -143,6 +155,24 @@ abstract class formField {
 		} else {
 			$this->delAttribute('readonly');	
 		}
+		
+		return $this;
+		
+	}
+	
+	public function setRequired($required) {
+		
+		if(!is_bool($required)) {
+			//new Exception();				
+		}
+		
+		if($required) {
+			$this->addAttribute('required', 'required');	
+		} else {
+			$this->delAttribute('required');	
+		}
+		
+		$this->addValidator('notEmpty', 'Das Feld "'.$this->name.'" muss befüllt werden');
 		
 		return $this;
 		

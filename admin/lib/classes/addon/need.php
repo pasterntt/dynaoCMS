@@ -8,7 +8,7 @@ class addonNeed {
 		$method = 'check'.ucfirst($name);
 		
 		if(!method_exists(get_called_class(), $method)) {
-			throw new Exception(sprintf(lang::get('addon_check_error'), __CLASS__, $name));
+			throw new Exception(sprintf(lang::get('addon_check_error'), __CLASS__, $method));
 		}
 		
 		return self::$method($value);	
@@ -17,8 +17,8 @@ class addonNeed {
 	
 	public static function checkVersion($version) {
 		
-		if(dyn::get('version') >= $version) {
-			return true;
+		if(dyn::checkVersion(dyn::get('version'), $version) !== lang::get('version_fail_connect')) {
+			return true;	
 		}
 		
 		return sprintf(lang::get('addon_wrong_version'), dyn::get('version'), $version);
@@ -35,11 +35,11 @@ class addonNeed {
 				$name = $version;
 				$version = false;
 			}
-		
-			$config = addonConfig::getConfig($name);
-			
+		    if(isset(dyn::get('addons')[$name])) {
+			    $config = dyn::get('addons')[$name];
+           }
 			// Nicht installiert
-			if(!is_array($config)) {
+			if(!isset($config) || !is_array($config)) {
 				$return .= sprintf(lang::get('addon_not_found'), $name);
 				continue;
 			}
@@ -49,7 +49,7 @@ class addonNeed {
 				continue;			
 			}
 			
-			if($version && $config['version'] < $version) {
+			if(dyn::checkVersion($config['version'], $version) === false) {
 				$return .=	sprintf(lang::get('addon_need_version'), $name, $version);
 				continue;
 			}

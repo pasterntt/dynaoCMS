@@ -61,11 +61,10 @@ class backend {
 		
 	}
 	
-	
 	/*
 	 * Subnavigation Methoden
 	 */
-	public static function addSubNavi($name, $link, $icon = 'circle', $pos = -1, $callback = null) {
+	public static function addSubNavi($name, $link, $pos = -1, $callback = null) {
 		
 		if(empty(self::$getVars)) {
 			self::setGets();	
@@ -84,7 +83,6 @@ class backend {
 		$item = [
 			'name'=>$name,
 			'link'=>$link,
-			'icon'=>$icon,
 			'callback'=>$callback
 		];
 		
@@ -94,7 +92,8 @@ class backend {
 	
 	public static function getSubNavi() {
 		
-		return self::generateNavi(self::$subnavi, self::getSubpageName(), 'subnav');
+		if(count(self::$subnavi) > 1)
+		return self::generateNavi(self::$subnavi, self::getSubpageName(), 'subnav', false);
 		
 	}
 	
@@ -112,7 +111,7 @@ class backend {
 		
 	}
 	
-	public static function addAddonNavi($name, $link, $pos = -1, $callback = null) {
+	public static function addAddonNavi($name, $link, $icon = 'circle', $pos = -1, $callback = null) {
 		
 		if(empty(self::$getVars)) {
 			self::setGets();	
@@ -131,6 +130,7 @@ class backend {
 		$item = [
 			'name'=>$name,
 			'link'=>$link,
+			'icon'=>$icon,
 			'callback'=>$callback
 		];
 	
@@ -139,7 +139,7 @@ class backend {
 	
 	public static function getAddonNavi() {
 		
-		return self::generateNavi(self::$addonNavi, self::getPageName());
+		return self::generateNavi(self::$addonNavi, self::getPageName(), '', true);
 		
 	}
 	
@@ -155,7 +155,7 @@ class backend {
 		} else {
 			$current = self::$addonNavi[self::getPageName()];
 		}
-		// isset gibts bei null false aus
+		// isset gibt bei null false aus
 		if(isset($current['callback']) && is_callable($current['callback'])) {
 			return $current['callback']();
 		}
@@ -163,10 +163,22 @@ class backend {
 		$page = self::$getVars[0];
 		
 		if(!$addon) {
-			return dir::page($page.'.php');
+			
+			if(file_exists(dir::page($page.'.php'))) {
+				return dir::page($page.'.php');
+			}
+			
 		} else {
-			return dir::addon($addon, 'page/'.$page.'.php');
+			
+			if(file_exists(dir::addon($addon, 'page'.DIRECTORY_SEPARATOR.$page.'.php'))) {
+				return dir::addon($addon, 'page'.DIRECTORY_SEPARATOR.$page.'.php');
+			}
+			
 		}
+		
+		echo message::danger(lang::get('page_not_found'));
+		
+		return false;
 		 
 	 }
 	
@@ -243,23 +255,28 @@ class backend {
 	
 		$return = [];
 		
-		if($main)
-			$return[] = '<li id="addonMobile"><a class="fa fa-chevron-down"> <span>Addon Navi</span></a></li>';
-		
 		foreach($naviArray as $navi) {
 			
 			$class = '';
-			$a_class = '';
+			$i_class = '';
+			
+			$tmp = '';
 			
 			if($name == $navi['name']) {
 				$class = ' class="active"';
 			}
 			
-			if(isset($navi['icon'])) {
-				$a_class = ' class="fa fa-'.$navi['icon'].'"';
-			}
+			$i_tag = (isset($navi['icon'])) ? '<i class="fa fa-'.$navi['icon'].'"></i> ' : '';
 			
-			$return[] = '<li'.$class.'><a'.$a_class.' href="'.$navi['link'].'" title="'.htmlspecialchars($navi['name']).'"> <span>'.$navi['name'].'</span></a></li>';
+			$tmp = '<li'.$class.'><a href="'.$navi['link'].'" title="'.htmlspecialchars($navi['name']).'">'.$i_tag.'<span>'.$navi['name'].'</span></a>';
+
+            if($name == $navi['name'] && $main == true) {
+                $tmp .= self::getSubNavi();
+            }
+			
+			$tmp .= '</li>';
+			
+			$return[] = $tmp;
 			
 		}
 		

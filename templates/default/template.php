@@ -6,8 +6,8 @@
     <base href="<?= dyn::get('hp_url'); ?>">
     <meta name="description" content="<?= $this->get('description') ?>">
 	<meta name="keywords" content="<?= $this->get('keywords') ?>">
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="templates/default/css/style.css" rel="stylesheet">
 </head>
 
@@ -49,9 +49,9 @@
     		<div class="row">
         		<div class="col-lg-12">
 				<?php
-                
-                if(slot::getSlot('welcome'))
-                    echo slot::getSlot('welcome');
+				
+                if(trim(block::getBlock('Startseite Headertext')))
+                    echo block::getBlock('Startseite Headertext');
                 else
                     echo '<h1>'.$this->get('name').'</h1>';
                 
@@ -65,7 +65,7 @@
     	<div class="row">
         	<div class="col-lg-12">
                 <section id="content">
-                	<?= slot::getSlot('boxen'); ?>
+                	<?= block::getBlock('Startseite 3er Box'); ?>
                     
                     <div class="row">
         				<div class="col-md-8">
@@ -105,8 +105,8 @@
             </div>
         </div>
     </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="templates/default/js/template.js"></script>
 </body>
 </html>

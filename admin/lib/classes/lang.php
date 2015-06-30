@@ -107,6 +107,26 @@ class lang {
 		self::loadLang($file, true);
 		
 	}
+
+    /**
+     * Gibt alle Sprachen als ARRAY aus, wobei immer KURZ:lang als Array generiert wird
+     *
+     */
+    static public function ListLang(){
+        $lang = [];
+        $handle = opendir(dir::backend('lib'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR));
+        while($file = readdir($handle)) {
+
+            if(in_array($file, ['.', '..']))
+                continue;
+            $array = json_decode(file_get_contents(dir::backend('lib'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR).'/'.$file.'/about.json'), true);
+            $lang[] = [
+                'short'=>$array['short'],
+                'readable'=>$array['readable']
+            ];
+        }
+        return $lang;
+    }
 	
 }
 

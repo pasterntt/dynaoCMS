@@ -4,9 +4,13 @@ class page {
 	use traitFactory;
 	use traitMeta;
 	
+	private $block;
+	
 	protected $sql;
 	
-	public function __construct($id, $offlinePages = true) {
+	public function __construct($id, $offlinePages = true, $block = false) {
+		
+		$this->block = $block;
 		
 		if(is_object($id)) {
 			
@@ -16,11 +20,13 @@ class page {
 			
 			$extraWhere = '';
 			
-			if(!$offlinePages) {				
-				$extraWhere =  'AND WHERE online = 1';				
-			}
+			if(!$offlinePages)		
+				$extraWhere =  'AND WHERE online = 1';
+			
+			$table = ($this->block) ? sql::table('blocks') : sql::table('structure');				
+
 			$this->sql = sql::factory();
-			$this->sql->query('SELECT *	FROM '.sql::table('structure').' WHERE id = '.$id.$extraWhere)->result();		
+			$this->sql->query('SELECT * FROM '.$table.' WHERE id = '.$id.$extraWhere)->result();		
 		
 		}
 		
@@ -39,33 +45,20 @@ class page {
 	}
 	
 	public function getBlocks() {
-		return module::getByStructureId($this->get('id'));
-	}
-	
-	public static function generateArticle($id) {
-		
-		$return = [];
-		
-		$backend = dyn::get('backend');
-		dyn::add('backend', false);
-		
-		$page = new page($id);
-		$blocks = $page->getBlocks();
-		
-		foreach($blocks as $block) {
-			$return[] =  $block->getContent();
-		}
-		
-		dyn::add('backend', $backend);
-		
-		return implode(PHP_EOL, $return);
+		return module::getByStructureId($this->get('id'), $this->block);
 	}
 	
 	public function getTemplate() {
 		
 		ob_start();
 		
-		$content = self::generateArticle($this->get('id'));
+		if(!pageCache::exist($this->get('id'))) {
+			pageCache::generateArticle($this->get('id'));
+		}
+				
+		$content = pageCache::read($this->get('id'));
+		
+		$content = pageArea::getEval($content);
 		
 		$content = extension::get('FRONTEND_OUTPUT', $content);
 		
