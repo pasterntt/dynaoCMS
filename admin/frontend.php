@@ -3,7 +3,9 @@
 ob_end_clean();
 
 foreach(addonConfig::includeAllConfig() as $file) {
-	include($file);	
+    if(file_exists($file)){
+        require_once($file);
+    }
 }
 
 $page = type::super('page_id', 'int', dyn::get('start_page'));
